@@ -103,34 +103,26 @@ gulp.task("bs", function() {
 });
 
 // Reload Browser
-gulp.task("bs-reload", function() {
+gulp.task("bs-reload", function(done) {
   browserSync.reload();
+  done();
 });
 
-//watch
-// gulp.task(
-//   "default",
-//   ["bs", "sass", "js.concat", "js.compress", "imagemin"],
-//   function() {
-//     gulp.watch("./**/*.html", gulp.task("bs-reload"));
-//     gulp.watch("./src/scss/*.scss", gulp.task("sass", "bs-reload"));
-//     gulp.watch("./src/js/*.js", gulp.task("js.concat", "js.compress", "bs-reload"));
-//     gulp.watch("./src/images/*", gulp.task("imagemin", "bs-reload"));
-//   }
-// );
+// 監視
+gulp.task("watch", function(done) {
+  gulp.watch("./**/*.html", gulp.task("bs-reload"));
+  gulp.watch("./src/scss/**/*.scss", gulp.task("sass"));
+  gulp.watch("./src/scss/**/*.scss", gulp.task("bs-reload"));
+  gulp.watch("./src/js/*.js", gulp.task("js.concat"));
+  gulp.watch("./src/js/*.js", gulp.task("js.compress"));
+  gulp.watch("./src/js/*.js", gulp.task("bs-reload"));
+  gulp.watch("./src/images/*", gulp.task("imagemin"));
+  gulp.watch("./src/images/*", gulp.task("bs-reload"));
+});
 
 gulp.task(
   "default",
   gulp.series(
-    gulp.parallel("bs", "sass", "js.concat", "js.compress", "imagemin"),
-    function() {
-      gulp.watch("./**/*.html", gulp.task("bs-reload"));
-      gulp.watch("./src/scss/*.scss", gulp.task("sass", "bs-reload"));
-      gulp.watch(
-        "./src/js/*.js",
-        gulp.task("js.concat", "js.compress", "bs-reload")
-      );
-      gulp.watch("./src/images/*", gulp.task("imagemin", "bs-reload"));
-    }
+    gulp.parallel("bs", "sass", "js.concat", "js.compress", "imagemin", "watch")
   )
 );
