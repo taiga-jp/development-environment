@@ -24,7 +24,7 @@ var uglify = require("gulp-uglify");
 var browserSync = require("browser-sync");
 
 //sass
-gulp.task("sass", function() {
+gulp.task("sass", function(done) {
   gulp
     .src("./src/scss/*.scss")
     .pipe(plumber())
@@ -43,6 +43,7 @@ gulp.task("sass", function() {
     )
     .pipe(sourcemaps.write())
     .pipe(gulp.dest("./dist/css/"));
+  done();
 });
 
 //画像圧縮
